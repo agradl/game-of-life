@@ -112,24 +112,34 @@ describe('a population proximity map', function () {
 
 describe('what should happen to a cell when the generation evolves', function () {
     it('should die if it has fewer than two live neighbors', function() {
-        var g = new Game([0, 0, 1, 1, 0]);
-        expect(g.cellShouldDie(2)).toBe(true);
-        expect(g.cellShouldDie(3)).toBe(true);
+        var g = new Game([1]);
+        g.proximityMap = [1];
+        expect(g.cellShouldDie(0)).toBe(true);
+        g.proximityMap = [0];
+        expect(g.cellShouldDie(0)).toBe(true);
     });
     it('should stay alive if it has two or three live neighbors', function() {
-        var g = new Game([0, 1, 1, 1, 0]);
-        g.evolve();
-        expect(g.current[2]).toEqual(1);
+        var g = new Game([1]);
+        g.proximityMap = [2];
+        expect(g.cellShouldDie(0)).toBe(false);
+        g.proximityMap = [3];
+        expect(g.cellShouldDie(0)).toBe(false);
     });
     it('should die if it has more than three live neighbors', function() {
-        var g = new Game([[0, 0, 1], [1, 1, 1], [0, 1, 0]]);
-        expect(g.cellShouldDie(1, 1)).toBe(true);
+        var g = new Game([1]);
+        g.proximityMap = [4];
+        expect(g.cellShouldDie(0)).toBe(true);
+        g.proximityMap = [5];
+        expect(g.cellShouldDie(0)).toBe(true);
     });
-    it('should come to life if it has exactly three live neighbors', function() {
-        var g = new Game([[0, 0, 1],
-                        [1, 1, 1],
-                        [0, 1, 0]]);
-        expect(g.cellShouldComeLive(2, 2)).toBe(true);
+    it('should only come to life if it has exactly three live neighbors', function() {
+        var g = new Game([0]);
+        g.proximityMap = [3];
+        expect(g.cellShouldComeAlive(0)).toBe(true);
+        g.proximityMap = [2];
+        expect(g.cellShouldComeAlive(0)).toBe(false);
+        g.proximityMap = [4];
+        expect(g.cellShouldComeAlive(0)).toBe(false);
     });
 });
 

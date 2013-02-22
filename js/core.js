@@ -98,7 +98,7 @@ Game.prototype.evolve = function () {
             arr.setVal(0, x, y);
             evolved = true;
         }
-        if (that.cellShouldComeLive(x, y)) {
+        if (that.cellShouldComeAlive(x, y)) {
             arr.setVal(1, x, y);
             evolved = true;
         }
@@ -111,6 +111,6 @@ Game.prototype.cellShouldDie = function(x, y) {
     return this.current.getVal(x, y) === 1 && (this.proximityMap.getVal(x, y) < 2 || this.proximityMap.getVal(x, y) > 3);
 };
 
-Game.prototype.cellShouldComeLive = function (x, y) {
+Game.prototype.cellShouldComeAlive = function (x, y) {
     return this.current.getVal(x, y) === 0 && this.proximityMap.getVal(x, y) === 3;
 };
