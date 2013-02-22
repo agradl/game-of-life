@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="js/core.js"></script>
+    <script src="js/mustache.min.js"></script>
+    <script id="template" type="text/html">
+        <table>
+            {{#.}}
+            <tr>
+                {{#.}}
+                <td class="heat-{{.}}">{{.}}</td>
+                {{/.}}
+            </tr>
+            {{/.}}
+        </table>
+    </script>
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+        }
+        table, tr, td {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #proximity .heat-0 {
+            background-color: navy;
+        }
+        #proximity .heat-1 {
+            background-color:blue
+        }
+        #proximity .heat-2 {
+            background-color:salmon
+        }
+        #proximity .heat-3 {
+            background-color: tomato;
+        }
+        #proximity .heat-4 {
+            background-color: crimson;
+        }
+        #proximity .heat-5 {
+            background-color: red;
+        }
+        #proximity .heat-6 {
+            background-color:orange;
+        }
+        #proximity .heat-7 {
+            background-color:yellow;
+        }
+        #proximity .heat-8 {
+            background-color: lime;
+        }
+        #population .heat-0 {
+            background-color: white;
+        }
+        #population .heat-1 {
+            background-color: green;
+        }
+        #population {
+            width: 400px;float: left;
+        }
+        #proximity {
+            width: 400px;float: left;
+        }
+    </style>
+</head>
+    <body onload="go();">
+        <div id="population">
+            
+        </div>
+        <div id="proximity">
+            
+        </div>
+    </body>
+    <script type="text/javascript">
+        var height = 20, width = 40;
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+        function getRandomArray(xLength, yLength) {
+            var arr = [];
+            for (var x = 0; x < xLength; x++) {
+                var innerArr = [];
+                for (var y = 0; y < yLength; y++) {
+                    innerArr.push(getRandomInt(0, 1));
+                }
+                arr.push(innerArr);
+            }
+            return arr;
+        }
+
+        function go() {
+            var compiledTemplate = Mustache.compile(document.getElementById('template').innerHTML);
+            var population = document.getElementById('population');
+            var proximity = document.getElementById('proximity');
+            
+            var theGame = new Game(getRandomArray(height, width));
+
+            var t = setInterval(evolveIt, 250);
+            
+            function evolveIt() {
+                theGame.evolve();
+                population.innerHTML = compiledTemplate(theGame.current);
+                proximity.innerHTML = compiledTemplate(theGame.proximityMap);
+                if (!theGame.canEvolve) {
+                    clearInterval(t);
+                    alert('game over!');
+                }
+            }
+        }
+        
+        
+
+    </script>
+</html>
